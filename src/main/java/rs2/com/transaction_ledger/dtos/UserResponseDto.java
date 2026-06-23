@@ -8,10 +8,10 @@ import java.util.UUID;
 public record UserResponseDto(
         @Schema(description = "Unique identifier of the user", example = "550e8400-e29b-41d4-a716-446655440000")
         UUID id,
-        @Schema(description = "Full name of the user", example = "Anas Momani")
+        @Schema(description = "Full name of the user", example = "Khaled Saleh")
         String name,
-        @Schema(description = "Email address of the user", example = "anasmomani@gmail.com")
+        @Schema(description = "Email address of the user", example = "kmsaleh290@gmail.com")
         String email,
-        @Schema(description = "Mobile phone number of the user", example = "+35612345678")
+        @Schema(description = "Mobile phone number of the user", example = "+36375393256")
         String mobileNumber) {
 }

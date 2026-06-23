@@ -22,7 +22,7 @@ import rs2.com.transaction_ledger.service.UserService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-@Tag(name = "Authentication", description = "Endpoints for user registration, login and profile retrieval")
+@Tag(name = "Authentication", description = "Register users, authenticate credentials, and retrieve the current user's profile.")
 public class UserController {
 
     private final UserService userService;
@@ -30,12 +30,12 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(
-            summary = "Register a new user",
-            description = "Creates a new user account with the provided registration details.",
+            summary = "Register user",
+            description = "Creates a user account using the supplied profile and password details.",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "User successfully registered"),
-                    @ApiResponse(responseCode = "400", description = "Validation error", content = @Content),
-                    @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
+                    @ApiResponse(responseCode = "201", description = "User registered."),
+                    @ApiResponse(responseCode = "400", description = "Invalid registration request.", content = @Content),
+                    @ApiResponse(responseCode = "500", description = "Registration could not be completed.", content = @Content)
             }
     )
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
@@ -52,13 +52,13 @@ public class UserController {
 
     @GetMapping("/user")
     @Operation(
-            summary = "Get current user details",
-            description = "Returns basic profile information about the currently authenticated user.",
+            summary = "Get current user",
+            description = "Returns profile information for the authenticated user represented by the JWT.",
             security = @SecurityRequirement(name = "bearer-jwt"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "User details returned successfully",
+                    @ApiResponse(responseCode = "200", description = "Current user profile returned.",
                             content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                    @ApiResponse(responseCode = "401", description = "Authentication is required.", content = @Content)
             }
     )
     public UserResponseDto getUserDetailsAfterLogin(Authentication authentication) {
@@ -67,18 +67,18 @@ public class UserController {
 
     @PostMapping("/apiLogin")
     @Operation(
-            summary = "Authenticate user and issue JWT",
-            description = "Authenticates user credentials and returns a JWT token in the response body and header.",
+            summary = "Log in",
+            description = "Authenticates user credentials and returns a JWT in both the response body and configured authorization header.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Authentication successful",
+                    @ApiResponse(responseCode = "200", description = "Authentication succeeded.",
                             content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
-                    @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content)
+                    @ApiResponse(responseCode = "401", description = "Credentials are invalid.", content = @Content)
             }
     )
     public ResponseEntity<LoginResponseDTO> apiLogin(@RequestBody LoginRequestDTO loginRequest) {
         LoginResponseDTO response = userService.apiLogin(loginRequest);
         return ResponseEntity.status(HttpStatus.OK)
-                .header(securityProperties.JWT_HEADER(), response.jwtToken())
+                .header(securityProperties.jwtHeader(), response.jwtToken())
                 .body(response);
     }
 }

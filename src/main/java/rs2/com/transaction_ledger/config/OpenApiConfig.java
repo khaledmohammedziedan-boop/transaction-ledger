@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "Transaction Ledger API",
                 version = "v1",
-                description = "API documentation for the Transaction Ledger service"
+                description = "REST API for user authentication and authenticated transaction ledger operations."
         ),
         security = {
                 @SecurityRequirement(name = "bearer-jwt")
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
         scheme = "bearer",
-        description = "JWT Bearer token. Paste the token without the 'Bearer ' prefix, or include 'Bearer ' if your filter strips it."
+        description = "JWT bearer authentication. Use the token returned by the login endpoint."
 )
 public class OpenApiConfig {
 }

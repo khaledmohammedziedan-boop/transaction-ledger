@@ -13,7 +13,9 @@ create table users (
                        created_at TIMESTAMP not null default NOW(),
                        updated_at TIMESTAMP default NOW(),
                        created_by VARCHAR(255) not null,
-                       updated_by VARCHAR(255)
+                       updated_by VARCHAR(255),
+
+                       version BIGINT not null default 0
 );
 -- Search users by email efficiently
 CREATE INDEX idx_users_email ON users(email);

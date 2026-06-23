@@ -57,9 +57,10 @@ public class SecurityConfig {
 //                .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPS
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/user", "/transaction", "/transaction/**").authenticated()
-                        .requestMatchers("/error", "/auth/register", "/invalidSession", "/auth/apiLogin", "/actuator/**", "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html").permitAll());
+                        .requestMatchers("/error", "/auth/register", "/invalidSession", "/auth/apiLogin", 
+    "/actuator/**", "/v3/api-docs/**",
+    "/swagger-ui/**",
+    "/swagger-ui.html").permitAll());
         http.formLogin(withDefaults());
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()));

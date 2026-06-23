@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(name = "LoginRequestDTO", description = "Request payload for authenticating a user")
 public record LoginRequestDTO(
-        @Schema(description = "Username or email used for login", example = "anasmomani@gmail.com")
+        @Schema(description = "Username or email used for login", example = "kmsaleh290@gmail.com")
         String username,
-        @Schema(description = "Plain text password for authentication", example = "P@ssw0rd!")
+        @Schema(description = "Plain text password for authentication", example = "P@ssw*rd!")
         String password) {
 }

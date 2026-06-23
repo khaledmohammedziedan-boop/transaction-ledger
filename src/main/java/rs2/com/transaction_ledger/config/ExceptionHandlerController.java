@@ -21,11 +21,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(BusinessException ex, WebRequest request) {
-        ex.printStackTrace();
-        Map<String, Object> map = new HashMap<String, Object>();
+        HttpStatus status = HttpStatus.resolve(ex.getHttpStatusCode());
+        if (status == null) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        Map<String, Object> map = new HashMap<>();
         map.put("message", ex.getMessage());
         map.put("code", ex.getCode());
-        map.put("httpStatusCode", HttpStatus.BAD_REQUEST.value());
-        return handleExceptionInternal(ex, map, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        map.put("httpStatusCode", status.value());
+        return handleExceptionInternal(ex, map, new HttpHeaders(), status, request);
     }
 }

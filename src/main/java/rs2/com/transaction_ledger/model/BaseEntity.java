@@ -48,7 +48,7 @@ public class BaseEntity {
 
     @PreUpdate
     protected void onUpdate() {
-        String updatedBy = Optional.ofNullable(SecurityContextHolder.getContext())
+        updatedBy = Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getName)

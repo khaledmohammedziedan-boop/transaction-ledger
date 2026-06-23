@@ -1,7 +1,6 @@
 package rs2.com.transaction_ledger.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,23 +28,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final SecurityProperties securityProperties;
-    private final Environment env;
 
     public void registerUser(UserRegistrationDto userRegistrationDto) {
         User user = new User();
-        String hashPwd = passwordEncoder.encode(userRegistrationDto.getPwd());
-        user.setPwd(hashPwd);
+        String hashedPassword = passwordEncoder.encode(userRegistrationDto.getPwd());
+        user.setPwd(hashedPassword);
         user.setName(userRegistrationDto.getName());
         user.setEmail(userRegistrationDto.getEmail());
         user.setMobileNumber(userRegistrationDto.getMobileNumber());
         user.setCreatedBy("SYSTEM_REGISTRATION");
-        User savedCustomer = userRepository.save(user);
+        userRepository.save(user);
     }
 
     public UserResponseDto loadUserByUsername(String email) {
         User user = userRepository.loadUserByUsername(email).orElseThrow(() -> new
                 RuntimeException("User details not found for the user: " + email));
-        return new UserResponseDto(user.getId(), user.getEmail(), user.getName(), user.getMobileNumber());
+        return new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getMobileNumber());
     }
 
     public User getUserByUsername(String email) {
@@ -59,19 +57,16 @@ public class UserService {
                 loginRequest.password());
         Authentication authenticationResponse = authenticationManager.authenticate(authentication);
         if (authenticationResponse != null && authenticationResponse.isAuthenticated()) {
-            if (env != null) {
-                String secret = env.getProperty(securityProperties.JWT_SECRET_KEY(),
-                        securityProperties.JWT_SECRET_DEFAULT_VALUE());
-                SecretKey secretKey = io.jsonwebtoken.security.Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-                jwt = io.jsonwebtoken.Jwts.builder().issuer("RS2").subject("JWT Token")
-                        .claim("username", authenticationResponse.getName())
-                        .claim("authorities", authenticationResponse.getAuthorities().stream()
-                                .map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.joining(",")))
-                        .issuedAt(new java.util.Date())
-                        .expiration(new java.util.Date((new java.util.Date()).getTime() + 30000000))
-                        .signWith(secretKey).compact();
-            }
+            String secret = securityProperties.jwtSecret();
+            SecretKey secretKey = io.jsonwebtoken.security.Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+            jwt = io.jsonwebtoken.Jwts.builder().issuer("KSALEH").subject("JWT Token")
+                    .claim("username", authenticationResponse.getName())
+                    .claim("authorities", authenticationResponse.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.joining(",")))
+                    .issuedAt(new java.util.Date())
+                    .expiration(new java.util.Date((new java.util.Date()).getTime() + 30000000))
+                    .signWith(secretKey).compact();
         }
         return new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), jwt);
     }

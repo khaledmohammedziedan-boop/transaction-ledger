@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 @Schema(name = "PageRequestDto", description = "Pagination request with filtering and sorting")
@@ -20,4 +21,14 @@ public record PageRequestDto(
         List<SortDto> sorts,
         @Schema(description = "List of filter specifications")
         List<FilterDto> filters
-) {}
+) {
+
+    public PageRequestDto withSafeDefaults() {
+        return new PageRequestDto(
+                page,
+                size,
+                sorts == null ? Collections.emptyList() : sorts,
+                filters == null ? Collections.emptyList() : filters
+        );
+    }
+}

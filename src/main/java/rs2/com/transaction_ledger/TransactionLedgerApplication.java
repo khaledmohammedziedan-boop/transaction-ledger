@@ -11,8 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan
 @OpenAPIDefinition(
         info = @Info(
-                title = "Transaction Ledger Service REST API Documentation",
-                description = "This is a simple Transaction-Ledger service REST API documentation for RS2 assignment",
+                title = "Transaction Ledger API",
+                description = "REST API for registering users, issuing JWTs, and managing authenticated transaction records.",
                 version = "v1",
                 contact = @Contact(
                         name = "Khaled Saleh",
