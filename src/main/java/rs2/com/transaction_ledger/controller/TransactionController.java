@@ -63,8 +63,8 @@ public class TransactionController {
     @Parameters({
             @Parameter(name = "page", description = "Zero-based page index", example = "0", required = false),
             @Parameter(name = "size", description = "Number of transactions to return per page.", example = "20", required = false),
-            @Parameter(name = "sort", description = "Sort expression in the format field,direction. Supported directions are ASC and DESC. Multiple sort parameters may be provided.", example = "createdAt,DESC", required = false),
-            @Parameter(name = "filter", description = "Filter expression in the format field,operator,value. Supported operators are EQ, NE, GT, GTE, LT, LTE, LIKE, and IN. Multiple filter parameters may be provided.", example = "amount,GT,100", required = false)
+            @Parameter(name = "sort", description = "Sort expression in the format field,direction. Supported directions are ASC and DESC. Example: sort=createdAt,DESC or sort=amount,ASC. Multiple sort parameters may be provided.", example = "createdAt,DESC", required = false),
+            @Parameter(name = "filter", description = "Filter expression in the format field,operator,value. Supported operators are EQ, NE, GT, GTE, LT, LTE, LIKE, and IN. Example: filter=amount,GT,100 or filter=createdAt,LTE,2026-06-24T23:59:59. Multiple filter parameters may be provided.", example = "amount,GT,100", required = false)
     })
     public ResponseEntity<PageResponseDto<TransactionResponseDto>> getTransactionsPage(
             @RequestParam(defaultValue = "0") @Min(0) int page,
